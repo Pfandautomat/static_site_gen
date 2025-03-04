@@ -6,9 +6,23 @@ class ParentNode(HTMLNode):
         super().__init__(tag, None, children, props)
         if self.tag is None:
             raise ValueError("Tag cannot be None for ParentNode")
-        if self.children is None:
-            raise ValueError("Children cannot be None for ParentNode")
+        if self.children is None or len(self.children) == 0:
+            raise ValueError("Children cannot be None or an empty list for ParentNode")
 
     
     def to_html(self):
-        raise
+        
+        full_html = []
+        full_html.append(f"<{self.tag}{self.props_to_html()}>")
+
+        for child in self.children:
+
+            full_html.append(child.to_html())
+        
+        full_html.append(f"</{self.tag}>")
+        return "".join(full_html)
+
+
+            
+
+
