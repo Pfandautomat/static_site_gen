@@ -18,7 +18,7 @@ def text_to_children(text):
         html_node = text_node_to_html_node(text_node)
         html_nodes.append(html_node)
 
-        return html_nodes
+    return html_nodes
 
 
 def handle_code_block(block):
