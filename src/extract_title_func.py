@@ -1,4 +1,5 @@
 from markdown_to_html import markdown_to_html_node
+from os import makedirs
 
 
 def extract_title(markdown):
@@ -33,3 +34,8 @@ def generate_page(from_path, template_path, dest_path):
 
     full_html = template_content.replace("{{ Title }}", title)
     full_html = full_html.replace("{{ Content }}", html_content)
+
+    with open(dest_path, 'w', encoding='utf-8') as output_file:
+        output_file.write(full_html)
+    
+    print(f"Successfully generated {dest_path}")

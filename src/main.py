@@ -1,6 +1,7 @@
 from textnode import *
 from os import path, listdir, mkdir
 from shutil import copy, rmtree
+from extract_title_func import generate_page
 import os
 
 print("hello world")
@@ -28,9 +29,7 @@ def copy_function(copy_from, copy_to):
             copy_function(source_path, dest_path)
 
 def main():
-    test_object = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
-    print(test_object)
-    
+
     # Get the current working directory (should be the project root when run from main.sh)
     current_dir = os.getcwd()
     
@@ -41,5 +40,20 @@ def main():
     else:
         # If run from project root (via main.sh)
         copy_function("static", "public")
+
+    current_dir = os.getcwd()
+
+    if path.basename(current_dir) == "src":
+        # If running from src directory
+        content_path = "../content/index.md"
+        template_path = "../template.html"
+        output_path = "../public/index.html"
+    else:
+        # If running from project root
+        content_path = "content/index.md"
+        template_path = "template.html"
+        output_path = "public/index.html"
+        
+    generate_page(content_path,template_path,output_path)
 
 main()
