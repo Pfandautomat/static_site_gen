@@ -1,4 +1,5 @@
 from markdown_to_html import markdown_to_html_node
+from pathlib import Path
 from os import path, listdir, mkdir
 from shutil import copy, rmtree
 import os
