@@ -19,7 +19,7 @@ def extract_title(markdown):
 
 
 
-def generate_page(from_path, template_path, dest_path): 
+def generate_page(from_path, template_path, dest_path,basepath="/"): 
      
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
@@ -36,6 +36,9 @@ def generate_page(from_path, template_path, dest_path):
 
     full_html = template_content.replace("{{ Title }}", title)
     full_html = full_html.replace("{{ Content }}", html_content)
+    full_html = full_html.replace('href="/', f'href="{basepath}')
+    full_html = full_html.replace('src="/', f'src="{basepath}')
+
 
     with open(dest_path, 'w', encoding='utf-8') as output_file:
         output_file.write(full_html)
@@ -44,7 +47,7 @@ def generate_page(from_path, template_path, dest_path):
 
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path,basepath="/"):
     # Print debug information to see what's happening
     print(f"Processing directory: {dir_path_content}")
     
@@ -62,7 +65,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 
                 # Generate the HTML file
                 print(f"Converting {source_path} to {html_path}")
-                generate_page(source_path, template_path, html_path)
+                generate_page(source_path, template_path, html_path, basepath)
         else:
             # Create the directory if it doesn't exist
             if not path.exists(dest_path):
@@ -70,7 +73,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 print(f"Created directory: {dest_path}")
             
             # Recurse into the directory
-            generate_pages_recursive(source_path, template_path, dest_path)
+            generate_pages_recursive(source_path, template_path, dest_path,basepath)
 
 
 
