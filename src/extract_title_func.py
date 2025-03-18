@@ -47,7 +47,7 @@ def generate_page(from_path, template_path, dest_path,basepath="/"):
 
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path,basepath="/"):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath="/"):
     # Print debug information to see what's happening
     print(f"Processing directory: {dir_path_content}")
     
@@ -55,25 +55,34 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path,base
 
     for obj in current_objects:
         source_path = path.join(dir_path_content, obj)
-        dest_path = path.join(dest_dir_path, obj)
-
+        
         if path.isfile(source_path):
             if obj.endswith(".md"):
-                # For markdown files, create HTML with same name (but .html extension)
-                html_file = obj.replace(".md", ".html") 
-                html_path = path.join(dest_dir_path, html_file)
+                # Special case for index.md files in subdirectories
+                if obj == "index.md" and dir_path_content != "content" and not dir_path_content.endswith("/content"):
+                    # Get the directory name from the path
+                    dir_name = path.basename(dir_path_content)
+                    # Generate HTML in the parent directory with the directory name
+                    parent_dir = path.dirname(dest_dir_path)
+                    html_path = path.join(parent_dir, f"{dir_name}.html")
+                    print(f"Clean URL: Converting {source_path} to {html_path}")
+                else:
+                    # Regular case - standard processing
+                    html_file = obj.replace(".md", ".html") 
+                    html_path = path.join(dest_dir_path, html_file)
+                    print(f"Converting {source_path} to {html_path}")
                 
                 # Generate the HTML file
-                print(f"Converting {source_path} to {html_path}")
                 generate_page(source_path, template_path, html_path, basepath)
-        else:
+        elif path.isdir(source_path):
             # Create the directory if it doesn't exist
+            dest_path = path.join(dest_dir_path, obj)
             if not path.exists(dest_path):
                 mkdir(dest_path)
                 print(f"Created directory: {dest_path}")
             
             # Recurse into the directory
-            generate_pages_recursive(source_path, template_path, dest_path,basepath)
+            generate_pages_recursive(source_path, template_path, dest_path, basepath)
 
 
 
