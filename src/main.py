@@ -1,7 +1,7 @@
 from textnode import *
 from os import path, listdir, mkdir
 from shutil import copy, rmtree
-from extract_title_func import generate_page
+from extract_title_func import generate_pages_recursive
 import os
 
 print("hello world")
@@ -44,16 +44,19 @@ def main():
     current_dir = os.getcwd()
 
     if path.basename(current_dir) == "src":
-        # If running from src directory
-        content_path = "../content/index.md"
+        # If run directly from src directory
+        copy_function("../static", "../public")
+        content_dir = "../content"
         template_path = "../template.html"
-        output_path = "../public/index.html"
+        public_dir = "../public"
     else:
-        # If running from project root
-        content_path = "content/index.md"
+        # If run from project root (via main.sh)
+        copy_function("static", "public")
+        content_dir = "content" 
         template_path = "template.html"
-        output_path = "public/index.html"
+        public_dir = "public"
+    
         
-    generate_page(content_path,template_path,output_path)
+    generate_pages_recursive(content_dir,template_path,public_dir)
 
 main()
