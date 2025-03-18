@@ -67,7 +67,7 @@ def main():
         public_dir = "docs"
     
         
-    generate_pages_recursive(content_dir,template_path,public_dir)
+    generate_pages_recursive(content_dir,template_path,public_dir,basepath)
 
 
 
